@@ -1,0 +1,42 @@
+http:
+  routers:
+    frontend:
+      rule: "Host(`fastbuy.local`)"
+      service: frontend
+      entryPoints: web
+
+    backend:
+      rule: "Host(`api.fastbuy.local`)"
+      service: backend
+      entryPoints: web
+
+    # apigateway:
+    #   rule: "Host(`gateway.fastbuy.local`)"
+    #   service: apigateway
+    #   entryPoints: web
+
+    # jenkins:
+    #   rule: "Host(`jenkins.fastbuy.local`)"
+    #   service: jenkins
+    #   entryPoints: web
+
+  services:
+    frontend:
+      loadBalancer:
+        servers:
+          - url: "http://frontend:80"
+
+    backend:
+      loadBalancer:
+        servers:
+          - url: "http://backend:3000"
+
+    # apigateway:
+    #   loadBalancer:
+    #     servers:
+    #       - url: "http://apigateway:5000"
+
+    # jenkins:
+    #   loadBalancer:
+    #     servers:
+    #       - url: "http://jenkins:8080"

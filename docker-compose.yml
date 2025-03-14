@@ -1,0 +1,67 @@
+version: "3.8"
+
+services:
+  traefik:
+    image: traefik:v2.9
+    command: --api.insecure=true --providers.docker
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080" # Traefik dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml
+      - ./traefik/dynamic_conf.yml:/etc/traefik/dynamic_conf.yml
+    networks:
+      - lab_network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: frontend.Dockerfile
+    container_name: frontend
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`fastbuy.local`)"
+    networks:
+      - lab_network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: backend.Dockerfile
+    container_name: backend
+    ports:
+      - "3000:3000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`api.fastbuy.local`)"
+    networks:
+      - lab_network
+  # apigateway:
+  #   build:
+  #     context: ./apigateway
+  #     dockerfile: krakend.Dockerfile
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.apigateway.rule=Host(`gateway.fastbuy.local`)"
+  #   networks:
+  #     - lab_network
+  # jenkins:
+  #   image: jenkins/jenkins:lts
+  #   ports:
+  #     - "50000:50000"
+  #   volumes:
+  #     - jenkins_home:/var/jenkins_home
+  #   labels:
+  #     - "traefik.enable=true"
+  #     - "traefik.http.routers.jenkins.rule=Host(`jenkins.fastbuy.local`)"
+  #   networks:
+  #     - lab_network
+
+networks:
+  lab_network:
+    driver: bridge
+
+volumes:
+  jenkins_home:

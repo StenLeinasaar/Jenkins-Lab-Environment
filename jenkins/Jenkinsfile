@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            steps {
+                echo 'Building Docker images...'
+                sh 'docker-compose build'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deploying services...'
+                sh 'docker-compose up -d'
+            }
+        }
+
+        stage('Test API Gateway') {
+            steps {
+                echo 'Testing KrakenD API Gateway...'
+                sh 'curl -s http://gateway.fastbuy.local/deals'
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline completed!'
+        }
+    }
+}
