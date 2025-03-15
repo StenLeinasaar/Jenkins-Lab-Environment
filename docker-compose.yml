@@ -38,6 +38,21 @@ services:
       - "traefik.http.routers.backend.rule=Host(`api.fastbuy.local`)"
     networks:
       - lab_network
+
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password # Set root password for MariaDB
+      MYSQL_DATABASE: fastbuy_db # Set database name
+      MYSQL_USER: fastbuy_user # Set user
+      MYSQL_PASSWORD: fastbuy_password # Set user password
+    volumes:
+      - ./mariadb/init.sql:/docker-entrypoint-initdb.d/init.sql # Load init.sql script to populate the DB
+    ports:
+      - "3306:3306" # Expose MariaDB port
+    networks:
+      - lab_network
   # apigateway:
   #   build:
   #     context: ./apigateway

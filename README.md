@@ -17,3 +17,10 @@ ADD TO HOST FILE
 /etc/hosts
 127.0.0.1 fastbuy.local
 127.0.0.1 api.fastbuy.local
+
+
+
+Task ideas for jenkins:
+
+1. Set up jenkins deployment to trigger frontend update when there is a github merge with a tag "frontend". Remember that first there has to be a pull request which then is merged into the main. 
+
