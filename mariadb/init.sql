@@ -4,7 +4,7 @@ CREATE DATABASE fastbuy_db;
 USE fastbuy_db;
 
 -- Create a user for accessing the database
-CREATE USER IF NOT EXISTS 'fastbuy_user'@'%' IDENTIFIED BY '';
+CREATE USER IF NOT EXISTS 'fastbuy_user'@'%' IDENTIFIED BY 'password';
 
 -- Grant privileges to the user
 GRANT ALL PRIVILEGES ON fastbuy_db.* TO 'fastbuy_user'@'%';
