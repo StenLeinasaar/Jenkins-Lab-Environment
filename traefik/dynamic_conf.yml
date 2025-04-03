@@ -24,12 +24,12 @@ http:
     frontend:
       loadBalancer:
         servers:
-          - url: "http://frontend:80"
+          - url: "http://fastbuy_frontend:80"
 
     backend:
       loadBalancer:
         servers:
-          - url: "http://backend:3000"
+          - url: "http://fastbuy_backend:3000"
 
     # apigateway:
     #   loadBalancer:

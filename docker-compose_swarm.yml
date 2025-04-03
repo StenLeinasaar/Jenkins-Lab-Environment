@@ -1,0 +1,68 @@
+version: "3.8"
+
+services:
+  traefik:
+    image: traefik:v2.9
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker"
+      - "--providers.docker.swarmMode=true"
+      - "--providers.docker.exposedbydefault=false"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080" # Traefik dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik/traefik.yml:/etc/traefik/traefik.yml
+      - ./traefik/dynamic_conf.yml:/etc/traefik/dynamic_conf.yml
+    networks:
+      - lab_network
+    deploy:
+      placement:
+        constraints: [ "node.role == manager" ]
+
+  frontend:
+    image: frontend:latest
+    deploy:
+      replicas: 2
+    networks:
+      - lab_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`fastbuy.local`)"
+      - "traefik.http.services.frontend.loadbalancer.server.port=80"
+
+  backend:
+    image: backend:latest
+    deploy:
+      replicas: 2
+    networks:
+      - lab_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`api.fastbuy.local`)"
+      - "traefik.http.services.backend.loadbalancer.server.port=3000"
+
+  mariadb:
+    image: mariadb:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: fastbuy_db
+      MYSQL_USER: fastbuy_user
+      MYSQL_PASSWORD: fastbuy_password
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./mariadb/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - lab_network
+    deploy:
+      placement:
+        constraints: [ "node.role == manager" ]
+
+networks:
+  lab_network:
+    driver: overlay
+
+volumes:
+  mariadb_data:
