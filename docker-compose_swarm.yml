@@ -22,6 +22,16 @@ services:
       placement:
         constraints: [ "node.role == manager" ]
 
+  apigateway:
+    image: krakend:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.apigateway.rule=Host(`gateway.fastbuy.local`)"
+    ports:
+      - "5000:5000"
+    networks:
+      - lab_network
+
   frontend:
     image: frontend:latest
     deploy:

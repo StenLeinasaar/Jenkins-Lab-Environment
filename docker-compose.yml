@@ -16,7 +16,7 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: frontend.Dockerfile
+      dockerfile: Dockerfile
     container_name: frontend
     labels:
       - "traefik.enable=true"
@@ -27,7 +27,7 @@ services:
   backend:
     build:
       context: ./backend
-      dockerfile: backend.Dockerfile
+      dockerfile: Dockerfile
     container_name: backend
     ports:
       - "3000:3000"
@@ -51,6 +51,15 @@ services:
       - "3306:3306" # Expose MariaDB port
     networks:
       - lab_network
+  # sonarqube:
+  #   image: sonarqube:latest
+  #   container_name: sonarqube
+  #   ports:
+  #     - "9000:9000"
+  #   volumes:
+  #     - sonarqube_data:/opt/sonarqube/data
+  #     - sonarqube_extensions:/opt/sonarqube/extensions
+
   # apigateway:
   #   build:
   #     context: ./apigateway

@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function fetchDeals() {
     try {
-        const response = await fetch("http://api.fastbuy.local/deals"); // Update the API URL if needed
+        const response = await fetch("http://api.fastbuy.local/deals"); // Update the API URL if needed  gateway.fastbuy.local
         const deals = await response.json(); // Expecting an array of deals
 
         const dealsContainer = document.getElementById("deals");

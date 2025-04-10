@@ -15,6 +15,10 @@ docker build --no-cache -t frontend:latest ./frontend || { echo "❌ Failed to b
 echo "🚀 Building backend image without cache..."
 docker build --no-cache -t backend:latest ./backend || { echo "❌ Failed to build backend"; exit 1; }
 
+
+echo "🚀 Building krakend image without cache..."
+docker build --no-cache -t krakend:latest ./apigateway || { echo "❌ Failed to build backend"; exit 1; }
+
 echo "🚀 Deploying stack to Docker Swarm..."
 docker stack deploy -c docker-compose_swarm.yml "$STACK_NAME" || { echo "❌ Failed to deploy stack"; exit 1; }
 

@@ -11,7 +11,7 @@
                 {
                     "url_pattern": "/deals",
                     "host": [
-                        "http://backend:3000"
+                        "http://api.fastbuy.local"
                     ],
                     "extra_config": {
                         "qos/sd": {

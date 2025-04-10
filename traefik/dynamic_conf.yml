@@ -10,10 +10,10 @@ http:
       service: backend
       entryPoints: web
 
-    # apigateway:
-    #   rule: "Host(`gateway.fastbuy.local`)"
-    #   service: apigateway
-    #   entryPoints: web
+    apigateway:
+      rule: "Host(`gateway.fastbuy.local`)"
+      service: apigateway
+      entryPoints: web
 
     # jenkins:
     #   rule: "Host(`jenkins.fastbuy.local`)"
@@ -31,10 +31,11 @@ http:
         servers:
           - url: "http://fastbuy_backend:3000"
 
-    # apigateway:
-    #   loadBalancer:
-    #     servers:
-    #       - url: "http://apigateway:5000"
+    apigateway:
+      loadBalancer:
+        servers:
+          - url: "http://fastbuy_apigateway:5000"
+    
 
     # jenkins:
     #   loadBalancer:
